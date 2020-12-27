@@ -24,17 +24,4 @@ func setupDB() {
 
 	// Migrate schema
 	db.AutoMigrate(&models.GymModel{})
-
-	// Init data
-	// db.Create(&models.GymModel{
-	// 	ID:       1,
-	// 	Name:     "init_name",
-	// 	Location: "some location",
-	// })
-
-	// db.Create(&models.GymModel{
-	// 	ID:       2,
-	// 	Name:     "init_name_2",
-	// 	Location: "some location 2",
-	// })
 }
