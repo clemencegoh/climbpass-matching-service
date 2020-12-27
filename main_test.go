@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// Integration Test Suite
 func TestHealthCheck(t *testing.T) {
 	//Here, we form a new HTTP request. This is the request that's going to be
 	// passed to our handler.
