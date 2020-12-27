@@ -1,7 +1,8 @@
 package controllers
 
 import (
-	"fmt"
+	"climbpass-matching-service/repositories"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -13,8 +14,16 @@ func AddGymControllers(r *mux.Router) {
 	r.HandleFunc(baseRoute, getGyms).Methods("GET")
 }
 
-
-// @GetController( path = "/" )
+// @GET("/")
 func getGyms(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "From gyms")
+
+	repo := repositories.GymRepository{}
+	gym := repo.GetGymByName("init_name")
+	response, err := json.Marshal(gym)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Write(response)
 }
