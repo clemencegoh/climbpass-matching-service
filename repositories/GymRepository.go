@@ -11,6 +11,8 @@ type IGymRepository interface {
 	GetGymByName(name string) models.GymModel
 	GetAllGyms() []*models.GymModel
 	CreateGym(gym models.GymModel)
+	DeleteGymByID(id int)
+	UpdateGymByID(gym models.GymModel)
 }
 
 // GymRepository struct
@@ -45,6 +47,17 @@ func (repo GymRepository) GetAllGyms() []*models.GymModel {
 	return gyms
 }
 
+// CreateGym creates new gym if not already
 func (repo GymRepository) CreateGym(gym models.GymModel) {
 	repo.db.Create(&gym)
+}
+
+// DeleteGymByID deletes a gym by its id
+func (repo GymRepository) DeleteGymByID(id int) {
+	repo.db.Delete(&models.GymModel{}, id)
+}
+
+// UpdateGymByID deletes a gym by its id
+func (repo GymRepository) UpdateGymByID(gym models.GymModel) {
+	repo.db.Save(&gym)
 }

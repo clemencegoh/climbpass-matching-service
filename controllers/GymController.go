@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"strconv"
+
 	"github.com/gorilla/mux"
 )
 
@@ -18,12 +20,16 @@ func AddGymControllers(r *mux.Router) {
 	r.HandleFunc(baseRoute, controller.getAllGyms).Methods("GET")
 	r.HandleFunc(baseRoute+"/{name}", controller.getGymByName).Methods("GET")
 	r.HandleFunc(baseRoute, controller.createGym).Methods("POST")
+	r.HandleFunc(baseRoute+"/{id}", controller.deleteGymByID).Methods("DELETE")
+	r.HandleFunc(baseRoute+"/{id}", controller.updateGymByID).Methods("PUT")
 }
 
 type IGymController interface {
 	getAllGyms(w http.ResponseWriter, r *http.Request)
 	createGym(w http.ResponseWriter, r *http.Request)
 	getGymByName(w http.ResponseWriter, r *http.Request)
+	deleteGymByID(w http.ResponseWriter, r *http.Request)
+	updateGymByID(w http.ResponseWriter, r *http.Request)
 }
 
 type GymController struct {
@@ -64,6 +70,7 @@ func (controller GymController) getGymByName(w http.ResponseWriter, r *http.Requ
 // @POST("/")
 func (controller GymController) createGym(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+
 	decoder := json.NewDecoder(r.Body)
 	var g models.GymModel
 	err := decoder.Decode(&g)
@@ -78,4 +85,49 @@ func (controller GymController) createGym(w http.ResponseWriter, r *http.Request
 		return
 	}
 	w.Write(resp)
+}
+
+// @DELETE("/:id")
+func (controller GymController) deleteGymByID(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	id, err := strconv.Atoi(params["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	response, err := controller.service.DeleteGymByID(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Write(response)
+}
+
+// @PUT("/:id")
+func (controller GymController) updateGymByID(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	id, err := strconv.Atoi(params["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	var g models.GymModel
+	err2 := decoder.Decode(&g)
+	if err2 != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	response, err3 := controller.service.UpdateGymByID(id, g)
+	if err3 != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Write(response)
 }

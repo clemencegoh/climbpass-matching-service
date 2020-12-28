@@ -1,6 +1,7 @@
 package services
 
 import (
+	"climbpass-matching-service/exceptions"
 	"climbpass-matching-service/models"
 	"climbpass-matching-service/repositories"
 	"encoding/json"
@@ -10,6 +11,8 @@ type IGymService interface {
 	GetGymByName(string) ([]byte, error)
 	GetAllGyms() ([]byte, error)
 	CreateGym(gym models.GymModel) ([]byte, error)
+	DeleteGymByID(id int) ([]byte, error)
+	UpdateGymByID(id int, gym models.GymModel) ([]byte, error)
 }
 
 // GymService implementaion of interface
@@ -34,6 +37,23 @@ func (service GymService) GetAllGyms() ([]byte, error) {
 }
 
 func (service GymService) CreateGym(gym models.GymModel) ([]byte, error) {
-	service.repository.CreateGym(gym)
-	return json.Marshal(gym)
+	existing := service.repository.GetGymByName(gym.Name)
+	if existing.ID == 0 {
+		service.repository.CreateGym(gym)
+		return json.Marshal(gym)
+	}
+	return []byte(""), exceptions.GymExistsException(gym.Name)
+}
+
+// DeleteGymByID deletes if there, does nothing if not
+func (service GymService) DeleteGymByID(id int) ([]byte, error) {
+	service.repository.DeleteGymByID(id)
+	return []byte(""), nil
+}
+
+// UpdateGymByID updates with new object
+func (service GymService) UpdateGymByID(id int, gym models.GymModel) ([]byte, error) {
+	gym.ID = id
+	service.repository.UpdateGymByID(gym)
+	return []byte(""), nil
 }

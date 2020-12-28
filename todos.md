@@ -1,6 +1,8 @@
 # List of TODO:
 
 ## Gyms
-- check for duplicates on creation
-- implement delete 
-- implement update
+- Implement integration tests to ensure full e2e
+
+## Climbers
+- Climber CRUD
+- Implement Auth
