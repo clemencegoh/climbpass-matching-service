@@ -2,26 +2,24 @@ package main
 
 import (
 	"climbpass-matching-service/models"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+	"climbpass-matching-service/repositories"
 	"net/http"
 )
 
 func main() {
 
-	setupDB()
-
-	// Listen and Serve
-	http.ListenAndServe(":8080", InitRouter())
-}
-
-func setupDB() {
-	// setup local db
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect to db")
-	}
+	// Setup DB
+	db := repositories.Connect()
 
 	// Migrate schema
-	db.AutoMigrate(&models.GymModel{})
+	err1 := db.AutoMigrate(&models.GymModel{})
+	if err1 != nil {
+		panic("failed to migrate models")
+	}
+
+	// Listen and Serve
+	err := http.ListenAndServe(":8080", InitRouter())
+	if err != nil {
+		panic(err)
+	}
 }
