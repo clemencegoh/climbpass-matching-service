@@ -5,15 +5,16 @@ import (
 	"climbpass-matching-service/models"
 	"climbpass-matching-service/repositories"
 	"encoding/json"
+	"fmt"
 )
 
 // IGymService interface for GymService
 type IGymService interface {
 	GetGymByName(string) ([]byte, error)
 	GetAllGyms() ([]byte, error)
-	CreateGym(gym models.GymModel) ([]byte, error)
+	CreateGym(gym models.GymProfile) ([]byte, error)
 	DeleteGymByID(id int) ([]byte, error)
-	UpdateGymByID(id int, gym models.GymModel) ([]byte, error)
+	UpdateGymByID(id int, gym models.GymProfile) ([]byte, error)
 }
 
 // GymService implementaion of interface
@@ -40,7 +41,7 @@ func (service GymService) GetAllGyms() ([]byte, error) {
 }
 
 // CreateGym creates a gym
-func (service GymService) CreateGym(gym models.GymModel) ([]byte, error) {
+func (service GymService) CreateGym(gym models.GymProfile) ([]byte, error) {
 	existing := service.repository.GetGymByName(gym.Name)
 	if existing.ID == 0 {
 		newGym := service.repository.CreateGym(gym)
@@ -49,14 +50,14 @@ func (service GymService) CreateGym(gym models.GymModel) ([]byte, error) {
 	return []byte(""), exceptions.GymExistsException(gym.Name)
 }
 
-// DeleteGymByID deletes if there, does nothing if not
+// DeleteGymByID deletes if present, does nothing if not
 func (service GymService) DeleteGymByID(id int) ([]byte, error) {
 	service.repository.DeleteGymByID(id)
-	return []byte(""), nil
+	return []byte(fmt.Sprintf("%v", id)), nil
 }
 
 // UpdateGymByID updates with new object
-func (service GymService) UpdateGymByID(id int, gym models.GymModel) ([]byte, error) {
+func (service GymService) UpdateGymByID(id int, gym models.GymProfile) ([]byte, error) {
 	gym.ID = id
 	service.repository.UpdateGymByID(gym)
 	return []byte(""), nil

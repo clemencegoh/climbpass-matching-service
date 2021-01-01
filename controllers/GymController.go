@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"climbpass-matching-service/constants"
 	"climbpass-matching-service/models"
 	"climbpass-matching-service/services"
 	"encoding/json"
@@ -13,10 +14,9 @@ import (
 
 // AddGymControllers handles routing for gyms endpoints
 func AddGymControllers(r *mux.Router) {
-
 	controller := NewGymController()
+	baseRoute := constants.APIBasePath + "/gyms"
 
-	baseRoute := "/gyms"
 	r.HandleFunc(baseRoute, controller.getAllGyms).Methods("GET")
 	r.HandleFunc(baseRoute+"/{name}", controller.getGymByName).Methods("GET")
 	r.HandleFunc(baseRoute, controller.createGym).Methods("POST")
@@ -24,6 +24,7 @@ func AddGymControllers(r *mux.Router) {
 	r.HandleFunc(baseRoute+"/{id}", controller.updateGymByID).Methods("PUT")
 }
 
+// IGymController interface for GymController
 type IGymController interface {
 	getAllGyms(w http.ResponseWriter, r *http.Request)
 	createGym(w http.ResponseWriter, r *http.Request)
@@ -32,10 +33,12 @@ type IGymController interface {
 	updateGymByID(w http.ResponseWriter, r *http.Request)
 }
 
+// GymController implements interface
 type GymController struct {
 	service services.IGymService
 }
 
+// NewGymController inits GymController
 func NewGymController() IGymController {
 	service := services.NewGymService()
 	return GymController{service}
@@ -43,8 +46,6 @@ func NewGymController() IGymController {
 
 // @GET("/")
 func (controller GymController) getAllGyms(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
 	response, err := controller.service.GetAllGyms()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -56,7 +57,6 @@ func (controller GymController) getAllGyms(w http.ResponseWriter, r *http.Reques
 
 // @GET("/:name")
 func (controller GymController) getGymByName(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	name := params["name"]
 	response, err := controller.service.GetGymByName(name)
@@ -69,10 +69,8 @@ func (controller GymController) getGymByName(w http.ResponseWriter, r *http.Requ
 
 // @POST("/")
 func (controller GymController) createGym(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
 	decoder := json.NewDecoder(r.Body)
-	var g models.GymModel
+	var g models.GymProfile
 	err := decoder.Decode(&g)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -89,7 +87,6 @@ func (controller GymController) createGym(w http.ResponseWriter, r *http.Request
 
 // @DELETE("/:id")
 func (controller GymController) deleteGymByID(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
@@ -107,7 +104,6 @@ func (controller GymController) deleteGymByID(w http.ResponseWriter, r *http.Req
 
 // @PUT("/:id")
 func (controller GymController) updateGymByID(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
 	id, err := strconv.Atoi(params["id"])
@@ -117,16 +113,16 @@ func (controller GymController) updateGymByID(w http.ResponseWriter, r *http.Req
 	}
 
 	decoder := json.NewDecoder(r.Body)
-	var g models.GymModel
+	var g models.GymProfile
 	err2 := decoder.Decode(&g)
 	if err2 != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err2.Error(), http.StatusBadRequest)
 		return
 	}
 
 	response, err3 := controller.service.UpdateGymByID(id, g)
 	if err3 != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err3.Error(), http.StatusBadRequest)
 		return
 	}
 	w.Write(response)

@@ -7,11 +7,11 @@ import (
 
 // IGymRepository exposed interface
 type IGymRepository interface {
-	GetGymByName(name string) models.GymModel
-	GetAllGyms() []*models.GymModel
-	CreateGym(gym models.GymModel) models.GymModel
+	GetGymByName(name string) models.GymProfile
+	GetAllGyms() []*models.GymProfile
+	CreateGym(gym models.GymProfile) models.GymProfile
 	DeleteGymByID(id int)
-	UpdateGymByID(gym models.GymModel) models.GymModel
+	UpdateGymByID(gym models.GymProfile) models.GymProfile
 }
 
 // GymRepository struct
@@ -26,16 +26,16 @@ func NewGymRepo() IGymRepository {
 }
 
 // GetGymByName gets gym by specific name
-func (repo GymRepository) GetGymByName(name string) models.GymModel {
-	var gyms models.GymModel
+func (repo GymRepository) GetGymByName(name string) models.GymProfile {
+	var gyms models.GymProfile
 	repo.db.First(&gyms, "name = ?", name)
 
 	return gyms
 }
 
 // GetAllGyms gets all
-func (repo GymRepository) GetAllGyms() []*models.GymModel {
-	var gyms []*models.GymModel
+func (repo GymRepository) GetAllGyms() []*models.GymProfile {
+	var gyms []*models.GymProfile
 
 	repo.db.Find(&gyms)
 
@@ -43,18 +43,18 @@ func (repo GymRepository) GetAllGyms() []*models.GymModel {
 }
 
 // CreateGym creates new gym if not already
-func (repo GymRepository) CreateGym(gym models.GymModel) models.GymModel {
+func (repo GymRepository) CreateGym(gym models.GymProfile) models.GymProfile {
 	repo.db.Create(&gym)
 	return gym
 }
 
 // DeleteGymByID deletes a gym by its id
 func (repo GymRepository) DeleteGymByID(id int) {
-	repo.db.Delete(&models.GymModel{}, id)
+	repo.db.Delete(&models.GymProfile{}, id)
 }
 
-// UpdateGymByID deletes a gym by its id
-func (repo GymRepository) UpdateGymByID(gym models.GymModel) models.GymModel {
+// UpdateGymByID updates a gym by its id
+func (repo GymRepository) UpdateGymByID(gym models.GymProfile) models.GymProfile {
 	repo.db.Save(&gym)
 	return gym
 }
