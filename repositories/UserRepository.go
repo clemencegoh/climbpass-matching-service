@@ -19,12 +19,13 @@ type UserRepository struct {
 	db *gorm.DB
 }
 
-// NewAuthRepo inits new AuthRepo
+// NewUserRepo inits new AuthRepo
 func NewUserRepo() IUserRepository {
 	db := Connect()
 	return UserRepository{db}
 }
 
+// GetUserByName gets by name
 func (repo UserRepository) GetUserByName(name string) models.User {
 	var user models.User
 	repo.db.First(&user, "name = ?", name)
@@ -32,15 +33,18 @@ func (repo UserRepository) GetUserByName(name string) models.User {
 	return user
 }
 
+// CreateUser creates new user
 func (repo UserRepository) CreateUser(user models.User) models.User {
 	repo.db.Create(&user)
 	return user
 }
 
+// DeleteUserByID deletes by id
 func (repo UserRepository) DeleteUserByID(id uint64) {
-	repo.db.Delete(&models.AuthUser{}, id)
+	repo.db.Delete(&models.User{}, id)
 }
 
+// UpdateUserByID updates a user
 func (repo UserRepository) UpdateUserByID(user models.User) models.User {
 	repo.db.Save(&user)
 	return user

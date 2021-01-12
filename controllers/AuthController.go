@@ -27,13 +27,18 @@ type IAuthController interface {
 
 // AuthController struct
 type AuthController struct {
-	service services.IAuthService
+	service     services.IAuthService
+	userService services.IUserService
 }
 
 // NewAuthController does init for auth
 func NewAuthController() IAuthController {
 	service := services.NewAuthService()
-	return AuthController{service}
+	userService := services.NewUserService()
+	return AuthController{
+		service:     service,
+		userService: userService,
+	}
 }
 
 // @POST("/")
@@ -64,8 +69,17 @@ func (controller AuthController) createNewAuthUser(w http.ResponseWriter, r *htt
 		return
 	}
 
-	resp, err := controller.service.CreateAuth(g)
+	newUser := models.User{
+		Name: g.Username,
+	}
+	user, err := controller.userService.CreateUser(newUser)
 	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	g.User = user
+	resp, err2 := controller.service.CreateAuth(g)
+	if err2 != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
