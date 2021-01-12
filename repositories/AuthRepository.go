@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"climbpass-matching-service/models"
+
 	"gorm.io/gorm"
 )
 
@@ -9,7 +10,7 @@ import (
 type IAuthRepository interface {
 	GetAuthByUsername(name string) models.AuthUser
 	CreateAuth(Auth models.AuthUser) models.AuthUser
-	DeleteAuthByID(id int)
+	DeleteAuthByID(id uint64)
 	UpdateAuthByID(Auth models.AuthUser) models.AuthUser
 }
 
@@ -39,7 +40,7 @@ func (repo AuthRepository) CreateAuth(Auth models.AuthUser) models.AuthUser {
 }
 
 // DeleteAuthByID deletes a auth user
-func (repo AuthRepository) DeleteAuthByID(id int) {
+func (repo AuthRepository) DeleteAuthByID(id uint64) {
 	repo.db.Delete(&models.AuthUser{}, id)
 }
 

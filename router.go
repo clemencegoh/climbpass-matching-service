@@ -7,8 +7,9 @@ import (
 	"climbpass-matching-service/models"
 	"climbpass-matching-service/repositories"
 	"fmt"
-	"gorm.io/gorm"
 	"net/http"
+
+	"gorm.io/gorm"
 
 	"github.com/gorilla/mux"
 )

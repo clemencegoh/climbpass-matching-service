@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 )
@@ -19,11 +18,10 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			}
 		}
 
-		// todo: Complete JWT validaity check
-		fmt.Println("auth required here")
-
-		// if  {
+		// err := auth.TokenValid(r)
+		// if err != nil {
 		// 	http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		// 	return
 		// }
 
 		next.ServeHTTP(w, r)

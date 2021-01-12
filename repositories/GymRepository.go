@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"climbpass-matching-service/models"
+
 	"gorm.io/gorm"
 )
 
@@ -10,7 +11,7 @@ type IGymRepository interface {
 	GetGymByName(name string) models.GymProfile
 	GetAllGyms() []*models.GymProfile
 	CreateGym(gym models.GymProfile) models.GymProfile
-	DeleteGymByID(id int)
+	DeleteGymByID(id uint64)
 	UpdateGymByID(gym models.GymProfile) models.GymProfile
 }
 
@@ -49,7 +50,7 @@ func (repo GymRepository) CreateGym(gym models.GymProfile) models.GymProfile {
 }
 
 // DeleteGymByID deletes a gym by its id
-func (repo GymRepository) DeleteGymByID(id int) {
+func (repo GymRepository) DeleteGymByID(id uint64) {
 	repo.db.Delete(&models.GymProfile{}, id)
 }
 

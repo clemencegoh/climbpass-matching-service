@@ -7,10 +7,7 @@ import (
 // User for normal climbing users
 type User struct {
 	gorm.Model
-	ID int `gorm:"primary_key;auto_increment;not_null"`
-
+	ID            uint64 `gorm:"primary_key;auto_increment" json:"id"`
 	Name          string
 	ClimbingGrade string
-
-	Gyms []GymProfile `gorm:"foreignKey:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

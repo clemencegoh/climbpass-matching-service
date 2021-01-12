@@ -7,7 +7,7 @@ import (
 // GymProfile for gyms
 type GymProfile struct {
 	gorm.Model
-	ID       int `gorm:"primary_key;auto_increment;not_null"`
+	ID       uint64 `gorm:"primary_key;auto_increment;" json:"id;"`
 	Name     string
 	Location string
 }

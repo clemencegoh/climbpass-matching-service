@@ -13,8 +13,8 @@ type IGymService interface {
 	GetGymByName(string) ([]byte, error)
 	GetAllGyms() ([]byte, error)
 	CreateGym(gym models.GymProfile) ([]byte, error)
-	DeleteGymByID(id int) ([]byte, error)
-	UpdateGymByID(id int, gym models.GymProfile) ([]byte, error)
+	DeleteGymByID(id uint64) ([]byte, error)
+	UpdateGymByID(id uint64, gym models.GymProfile) ([]byte, error)
 }
 
 // GymService implementaion of interface
@@ -51,13 +51,13 @@ func (service GymService) CreateGym(gym models.GymProfile) ([]byte, error) {
 }
 
 // DeleteGymByID deletes if present, does nothing if not
-func (service GymService) DeleteGymByID(id int) ([]byte, error) {
+func (service GymService) DeleteGymByID(id uint64) ([]byte, error) {
 	service.repository.DeleteGymByID(id)
 	return []byte(fmt.Sprintf("%v", id)), nil
 }
 
 // UpdateGymByID updates with new object
-func (service GymService) UpdateGymByID(id int, gym models.GymProfile) ([]byte, error) {
+func (service GymService) UpdateGymByID(id uint64, gym models.GymProfile) ([]byte, error) {
 	gym.ID = id
 	service.repository.UpdateGymByID(gym)
 	return []byte(""), nil

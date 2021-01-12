@@ -88,7 +88,7 @@ func (controller GymController) createGym(w http.ResponseWriter, r *http.Request
 // @DELETE("/:id")
 func (controller GymController) deleteGymByID(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	id, err := strconv.Atoi(params["id"])
+	id, err := strconv.ParseUint(params["id"], 10, 32)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -106,7 +106,7 @@ func (controller GymController) deleteGymByID(w http.ResponseWriter, r *http.Req
 func (controller GymController) updateGymByID(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
-	id, err := strconv.Atoi(params["id"])
+	id, err := strconv.ParseUint(params["id"], 10, 32)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

@@ -7,9 +7,9 @@ import (
 // AuthUser for auth login
 type AuthUser struct {
 	gorm.Model
-	ID       int `gorm:"primary_key;auto_increment;not_null"`
+	ID       uint64 `gorm:"primary_key;auto_increment;" json:"id"`
 	Username string
 	Password string
 
-	User *User `gorm:"foreignKey:ID;"`
+	User User `gorm:"foreignKey:ID"`
 }
