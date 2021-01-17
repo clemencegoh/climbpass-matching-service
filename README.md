@@ -4,7 +4,7 @@ Experimental matching service using business logic of climbpass as an example
 
 Goal is to see how well this can be implemented in Go.
 
-Mainly just for learning
+Mainly just for learning Golang's web-related capabilities
 
 
 # Functions
