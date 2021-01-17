@@ -42,7 +42,7 @@ func (service AuthService) AuthenticateUser(authUser models.AuthUser) ([]byte, e
 		// User not found
 		return []byte(""), exceptions.UserNotFoundException()
 	}
-	token, err := auth.CreateToken(authUser.ID)
+	token, err := auth.CreateToken(existing.User.ID, existing.User.Name)
 	if err != nil {
 		return []byte(""), exceptions.UserNotFoundException()
 	}
