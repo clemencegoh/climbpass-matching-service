@@ -16,6 +16,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		for _, b := range excludedPaths {
 			if strings.Contains(r.URL.Path, b) {
 				next.ServeHTTP(w, r)
+				return
 			}
 		}
 

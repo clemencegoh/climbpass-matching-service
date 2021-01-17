@@ -46,7 +46,6 @@ func (service AuthService) AuthenticateUser(authUser models.AuthUser) ([]byte, e
 	if err != nil {
 		return []byte(""), exceptions.UserNotFoundException()
 	}
-	fmt.Println(token)
 	return []byte(token), nil
 }
 
