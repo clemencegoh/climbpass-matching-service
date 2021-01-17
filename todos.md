@@ -1,8 +1,9 @@
 # List of TODO:
+- (Pending)
 
-## Gyms
-- Implement integration tests to ensure full e2e
 
-## Climbers
+# Completed
 - Climber CRUD
-- Implement Auth
+    - Link to Login user
+- Gyms CRUD
+- Auth with jwtTokens

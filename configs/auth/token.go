@@ -13,6 +13,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
+// CreateToken creates jwtToken, for now only store userID
 func CreateToken(user_id uint64) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
@@ -22,6 +23,7 @@ func CreateToken(user_id uint64) (string, error) {
 	return token.SignedString([]byte(os.Getenv("API_SECRET")))
 }
 
+// TokenValid validates token
 func TokenValid(r *http.Request) error {
 	tokenString := ExtractToken(r)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -39,6 +41,7 @@ func TokenValid(r *http.Request) error {
 	return nil
 }
 
+// ExtractToken extracts all details from token
 func ExtractToken(r *http.Request) string {
 	keys := r.URL.Query()
 	token := keys.Get("token")
@@ -52,6 +55,7 @@ func ExtractToken(r *http.Request) string {
 	return ""
 }
 
+// ExtractTokenID extracts user id from token, use when need to know identity of the user
 func ExtractTokenID(r *http.Request) (uint64, error) {
 
 	tokenString := ExtractToken(r)
@@ -75,7 +79,7 @@ func ExtractTokenID(r *http.Request) (uint64, error) {
 	return 0, nil
 }
 
-//Pretty display the claims licely in the terminal
+//Pretty display the claims nicely in the terminal
 func Pretty(data interface{}) {
 	b, err := json.MarshalIndent(data, "", " ")
 	if err != nil {
