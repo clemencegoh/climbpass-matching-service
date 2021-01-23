@@ -31,6 +31,7 @@ type AuthController struct {
 	userService services.IUserService
 }
 
+// @MAPPING("/auth")
 // NewAuthController does init for auth
 func NewAuthController() IAuthController {
 	service := services.NewAuthService()

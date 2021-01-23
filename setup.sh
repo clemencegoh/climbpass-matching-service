@@ -2,6 +2,7 @@
 sudo service postgresql start
 
 # create database if not already
+# sudo -u postgres psql postgres -c "DROP DATABASE climbpass"
 sudo -u postgres psql postgres -c "CREATE DATABASE climbpass WITH ENCODING 'UTF8'"
 
 # To delete data from table:
