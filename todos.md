@@ -14,3 +14,7 @@
     - Link to Login user
 - Gyms CRUD
 - Auth with jwtTokens
+
+
+# Generation
+- Generate with `gogen new -c <component> -t /home/clemence/workspace/projects/gogen/templates`
