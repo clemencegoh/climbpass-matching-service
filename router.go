@@ -31,6 +31,7 @@ func InitRouter(env string) *mux.Router {
 		&models.User{},
 		&models.GymProfile{},
 		&models.AuthUser{},
+		&models.EventModel{},
 	)
 	if err1 != nil {
 		panic("failed to migrate models")
@@ -47,6 +48,7 @@ func InitRouter(env string) *mux.Router {
 	r.HandleFunc(constants.APIBasePath+"/health", healthCheckHandler).Methods("GET")
 	controllers.AddGymControllers(r)
 	controllers.AddAuthControllers(r)
+	controllers.AddEventControllers(r)
 
 	// Middlewares
 	r.Use(middlewares.ContentType)

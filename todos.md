@@ -17,4 +17,6 @@
 
 
 # Generation
-- Generate with `gogen new -c <component> -t /home/clemence/workspace/projects/gogen/templates`
+- Generation tool (Custom): https://github.com/clemencegoh/gogen
+- Generate with `gogen new -t /home/clemence/workspace/projects/gogen/templates -w climbpass-matching-service -c <component>`
+- **Remember to add `AddHandlers` method in router.go**
